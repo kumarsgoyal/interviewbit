@@ -1,0 +1,28 @@
+public class Solution {
+    public int solve(ArrayList<Integer> A, int B) {
+        int index = 0, size = A.size(), len = B * 2;
+        int[] temp = new int[len];
+        
+        for(int i = size - B; i < size; i++) 
+            temp[index++] = A.get(i);
+        
+        for(int i = 0; i < B; i++) 
+            temp[index++] = A.get(i);
+        
+        int maxSum = 0, sum = 0;
+        
+        int index1 = 0;
+        int index2 = 0;
+        for(; index2 < B; index2++) 
+            sum = sum + temp[index2];
+        
+        maxSum = sum;
+        
+        while(index2 < len) {
+            sum = sum + temp[index2++] - temp[index1++];
+            maxSum = Math.max(maxSum, sum);
+        }
+        
+        return maxSum;
+    }
+}
