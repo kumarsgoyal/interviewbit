@@ -1,0 +1,79 @@
+public class Solution {
+    public int solve(ArrayList<Integer> A) {
+        int maxSum = 0, size = A.size();
+        int[] right = new int[size + 1];
+        
+        right[size] = 0;
+        for(int i = size - 1; i >= 0; i--) {
+            right[i] = Math.max(right[i + 1], A.get(i));
+        }
+        
+        TreeSet<Integer> lowValue = new TreeSet<Integer>();
+        lowValue.add(Integer.MIN_VALUE);
+
+        for(int i = 0; i < size - 1; i++) {
+            int left = lowValue.lower(A.get(i));
+            if(right[i + 1] > A.get(i) && left != Integer.MIN_VALUE) 
+                maxSum = Math.max(maxSum, left + A.get(i) + right[i + 1]);
+ 
+            // Insert A[i] in set<> for further
+            // processing
+            lowValue.add(A.get(i));
+        }
+        
+        return maxSum;
+    }
+}
+
+
+/*
+// Time :- O(n^2)
+// space :- O(1)
+
+public class Solution {
+    public int solve(ArrayList<Integer> A) {
+        int maxSum = 0, size = A.size();
+        
+        for(int i = 1; i < size - 1; i++) {
+            int left = 0, right = 0;
+            for(int j = 0; j < i; j++) {
+                if(A.get(j) < A.get(i))     
+                    left = Math.max(left, A.get(j));
+            }
+            
+            for(int k = i + 1; k < size; k++) {
+                if(A.get(i) < A.get(k))     
+                    right = Math.max(right, A.get(k));
+            }
+            
+            if(left != 0 && right != 0)
+                maxSum = Math.max(maxSum, left + A.get(i) + right);
+        }
+        
+        return maxSum;
+    }
+}
+*/
+
+
+/*
+// Time :- O(n^3)
+// space :- O(1)
+
+public class Solution {
+    public int solve(ArrayList<Integer> A) {
+        int maxSum = 0, size = A.size();
+        
+        for(int i = 0; i < size; i++) {
+            for(int j = i + 1; j < size; j++) {
+                for(int k = j + 1; k < size; k++) {
+                    if(A.get(i) < A.get(j) && A.get(j) < A.get(k))
+                        maxSum = Math.max(maxSum, A.get(i) + A.get(j) + A.get(k));
+                }
+            }
+        }
+        
+        return maxSum;
+    }
+}
+*/
