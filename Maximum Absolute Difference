@@ -1,0 +1,75 @@
+/*
+          { x , x >= 0 }
+    |x| = {            }
+          { -x , x < 0 }
+          
+    |A[i] - A[j]| is |x| and |i - j| is |x|
+    
+    
+    |A[i] - A[j]| + |i - j|
+    
+    1) A[i] - A[j] > 0  & i - j > 0   or   A[i] > A[j] &  i > j
+       A[i] - A[j] + i - j
+       (A[i] + i) - (A[j] + j)       
+       
+    2) A[i] - A[j] > 0  & i - j < 0   or   A[i] > A[j] &  i < j
+       A[i] - A[j] + (-i + j)
+       (A[i] - i) - (A[j] - j)
+       
+    3) A[i] - [j] < 0  & i - j > 0    or   A[i] < A[j] &  i > j
+       (-A[i] + A[j]) + i - j
+       (-A[i] + i) + (A[j] - j)
+       -(A[i] - i) + (A[j] - j)
+    
+    4) A[i] - A[j] < 0  & i - j < 0   or   A[i] < A[j] &  i < j
+       (-A[i] + A[j]) +  (-i + j )
+       -(A[i] + i) + (A[j] + j)
+       
+       
+    A[i] + i -------- max, min
+    A[i] - i -------- max, min
+    
+*/
+
+public class Solution {
+    public int maxArr(ArrayList<Integer> A) {
+        int max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE;
+        int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
+        
+        for(int i = 0; i < A.size(); i++) {
+            int num = A.get(i);
+            
+            max1 = Math.max(max1, num + i);
+            min1 = Math.min(min1, num + i);
+            max2 = Math.max(max2, num - i);
+            min2 = Math.min(min2, num - i);
+        }
+        
+        return Math.max(max1 - min1, max2 - min2);
+    }
+}
+
+
+
+
+/*
+
+// In a brute force approach we are going to going to compare each element with other elements and find the abs max value.
+// time :- O(n^2)
+// space :- O(1)
+
+public class Solution {
+    public int maxArr(ArrayList<Integer> A) {
+        int n = A.size();
+        int max = 0;
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                max = Math.max(max, Math.abs(A.get(i) - A.get(j)) + Math.abs( i - j));
+            }
+        }
+        
+        return max;
+    }
+}
+*/
