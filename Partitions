@@ -1,0 +1,53 @@
+/*
+    [1, 2, 3, 0, 3] sum = 9, partSum / 3;
+    
+    left :- 1 
+    right :- 4, 3
+    
+    
+*/
+
+public class Solution {
+    
+    private static final int partition = 3;
+    
+    public int solve(int A, int[] B) {
+        List<Integer> prefixList = new ArrayList<> ();
+        List<Integer> suffixList = new ArrayList<> ();
+        int sum = 0, count = 0, n = 0;
+        
+        for(int i : B) 
+            sum += i;
+        
+        if(sum % partition != 0) return count;
+        int partSum = sum / partition;
+    
+        sum = 0;
+        for(int i = 0; i < A; i++) {
+            sum += B[i];
+            if(sum == partSum) prefixList.add(i);
+        }
+        
+        sum = 0;
+        for(int i = A - 1; i >= 0; i--) {
+            sum += B[i];
+            if(sum == partSum) suffixList.add(i);
+        }
+
+        for(int i : prefixList) {
+            for(int j : suffixList) {
+                sum = 0;
+                n = 0;
+                for(int k = i + 1; k < j; k++) {
+                    sum += B[k];
+                    n = 1;
+                }
+                
+                if(sum == partSum && n == 1)
+                    count++;
+            }
+        }
+    
+        return count;
+    }
+}
