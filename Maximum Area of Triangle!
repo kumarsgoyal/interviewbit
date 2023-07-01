@@ -1,0 +1,126 @@
+public class Solution {
+    private static int rIndex = 0, gIndex = 1, bIndex = 2;
+    public int solve(ArrayList<String> A) {
+        int size = A.size();
+        int area = solveUtil(A);
+        
+        // The above solveUtil function will give the max area considering that 
+        // Base will always be on the left side of the third vertex.
+        // To calculate the area of triangles with base in the right and third vertex at left
+        // We need to reverse the Array A
+        for(int i = 0; i < size; i++) {
+            A.set(i, new StringBuilder(A.get(i)).reverse().toString());
+        }
+        
+        area = Math.max(area, solveUtil(A));
+        return area;
+    }
+    
+    
+    private int solveUtil(ArrayList<String> A) {
+        int n = A.size();
+        
+        if(n < 2) 
+            return 0;
+            
+        int m = A.get(0).length();
+    
+        // This array will store the last column of R, G and B respectively
+        int lastColWithRGB[] = {m, m, m};
+        // boolean flag to check if we get all the colors
+        boolean foundAllColors = false; 
+    
+        // This loop will fill the lastColWithRGB array
+        for(int j = m - 1; j >= 0; j--) {
+            for(int i = 0; i < n; i++) {
+                if(A.get(i).charAt(j) == 'r' && lastColWithRGB[rIndex] == m){
+                    lastColWithRGB[0] = j;
+                }
+                else if(A.get(i).charAt(j) == 'g' && lastColWithRGB[gIndex] == m){
+                    lastColWithRGB[1] = j;
+                }
+                else if(A.get(i).charAt(j) == 'b' && lastColWithRGB[bIndex] == m){
+                    lastColWithRGB[2] = j;
+                }
+                // If this condition satisfies that means we don't need to iterate ahead.
+                // as we have found all the colors.
+                if(lastColWithRGB[rIndex] != m && lastColWithRGB[gIndex] != m && lastColWithRGB[bIndex] != m){
+                    foundAllColors = true;
+                    break;
+                }
+            }
+    
+            if(foundAllColors) break;
+        }
+        
+        // If this flag is false that means atleast one color is not present in the matrix.
+        // So in this case return 0.
+        if(foundAllColors == false) return 0;   
+        
+        int res = 0;
+        for(int i = 0; i < m; i++) {
+            // Get max base with side rg or gr
+            int base = findMaxDistanceBwn('r', 'g', i, A); 
+            // get the height from current column to farthest column which contains color 'b'
+            int height = lastColWithRGB[bIndex] - i + 1;
+            if(height > 0) {
+                res = Math.max(res, area(base, height));
+            }
+            
+            // Get max base with side rb or br
+            base = findMaxDistanceBwn('r', 'b', i, A); 
+            // get the height from current column to farthest column which contains color 'g'
+            height = lastColWithRGB[gIndex] - i+1;
+            if(height > 0) {
+                res = Math.max(res, area(base, height));
+            }
+            
+            // Get max base with side gb or bg
+            base = findMaxDistanceBwn('g', 'b', i, A); 
+            // get the height from current column to farthest column which contains color 'r'
+            height = lastColWithRGB[rIndex] - i+1;
+            if(height > 0) {
+                res = Math.max(res, area(base, height));
+            }
+        }
+    
+        return res;
+    }
+    
+    // this function returns the area of triangle
+    private int area(int base, int height) {
+        return (int) Math.ceil(0.5 * base * height);
+    }
+    
+    // This function will return the max len of the base that can be formed 
+    // with colors a and b, where a & b can be any of the r,g,b values
+    private int findMaxDistanceBwn(char a, char b, int index, ArrayList<String> A) {
+        int n = A.size();
+        int top = 0, bottom = n - 1, base = 0; 
+        // Find the top position with color a
+        while(top < n && A.get(top).charAt(index) != a){
+            top++;     
+        }
+        // Find the bottom position with color b
+        while(bottom >= 0 && A.get(bottom).charAt(index) != b){
+            bottom--;
+        }
+        
+        base = Math.max(base, bottom - top + 1); 
+        
+        top = 0; 
+        bottom = n - 1; 
+        // Find the top position with color b
+        while(top < n && A.get(top).charAt(index) != b){
+            top++;
+        }
+        // Find the bottom position with color a
+        while(bottom >= 0 && A.get(bottom).charAt(index)  != a){
+            bottom--;
+        }
+        
+        // return the maximum of base ab or ba
+        return Math.max(base, bottom - top + 1);
+    }
+    
+}
