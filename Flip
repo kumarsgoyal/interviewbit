@@ -1,0 +1,30 @@
+public class Solution {
+    public ArrayList<Integer> flip(String A) {
+        int currDiff = 0, maxDiff = 0, left = 0, ansLeft = -1, ansRight = -1;
+        ArrayList<Integer> result = new ArrayList<> (); 
+        
+        for(int i = 0; i < A.length(); i++) {
+            if(A.charAt(i) == '1') 
+                currDiff--;
+            else 
+                currDiff++;
+            
+            if(currDiff > maxDiff) {
+                maxDiff = currDiff;
+                ansLeft = left + 1; // 1 based Indexing
+                ansRight = i + 1;
+            }
+            else if(currDiff < 0) {
+                left = i + 1;
+                currDiff = 0;
+            }
+        }
+        
+        if(ansLeft != -1 && ansRight != -1) {
+            result.add(ansLeft);
+            result.add(ansRight);
+        }
+        
+        return result;
+    }
+}
