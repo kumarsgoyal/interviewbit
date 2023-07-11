@@ -1,0 +1,45 @@
+public class Solution {
+        public ArrayList<Integer> solve(ArrayList<Integer> A) {
+        int index = 0, n = A.size();
+        
+        for(int i = 0; i < n; i++) {
+            if(A.get(i) != 0) {
+                swap(A, i, index);
+                index++;
+            }
+        }
+        
+        return A;
+    }
+    
+    private void swap(ArrayList<Integer> A, int i, int j) {
+        int temp = A.get(i);
+        A.set(i, A.get(j));
+        A.set(j, temp);
+    } 
+}
+
+
+
+
+/*
+public class Solution {
+    public ArrayList<Integer> solve(ArrayList<Integer> A) {
+        int index = 0;
+        
+        for(int i = 0; i < A.size(); i++) {
+            if(A.get(i) != 0) {
+                A.set(index, A.get(i));
+                index++;
+            }
+        }
+        
+        while(index != A.size()) {
+            A.set(index, 0);
+            index++;
+        }
+        
+        return A;
+    }
+}
+*/
