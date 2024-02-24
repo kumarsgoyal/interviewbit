@@ -1,0 +1,33 @@
+public class Solution {
+    public int[] maxset(int[] A) {
+        int left = 0, right = 0, sum = 0, max = 0, aleft = -1, aright = -1; 
+        
+        for(int i = 0; i < A.length; i++) {
+            if(A[i] >= 0) {
+                sum += A[i];
+                if((sum > max) || ((sum == max) && ((aright - aleft) < (right - left))) ) { 
+                    max = sum;
+                    aleft = left;
+                    aright = right; 
+                }
+            }
+            else {
+                sum = 0;
+                left = i + 1;
+            }
+            right++;
+        }
+        
+        if(aright == -1)
+            return new int[0];
+        
+        int[] result = new int[aright - aleft + 1];
+        int index = 0;
+        
+        for(int i = aleft; i <= aright; i++) {
+            result[index++] = A[i];
+        } 
+        
+        return result;
+    }
+}
